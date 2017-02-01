@@ -1,38 +1,24 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BackgroundHandler : MonoBehaviour, IPointerClickHandler {
 
-    MainCamera sceneCamera;
+    HandlerHelper.OneClickFunc OneTouch = new HandlerHelper.OneClickFunc(Touch);
+    HandlerHelper.DoubleClickFunc TwoTouch = new HandlerHelper.DoubleClickFunc(Touch2);
 
-    bool touching = false;
-    float timeDoubleTouch = 0.3f;
-    float lastTouch;
-
-    void Start()
-    {
-        sceneCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MainCamera>();
-    }
-
-    void Update()
-    {
-        if (touching && (Time.time - lastTouch > timeDoubleTouch))
-        {
-            touching = false;
-        }
-    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (touching)
-        {
-            touching = false;
-            sceneCamera.ZoomUp();
-        }
-        else
-        {
-            touching = true;
-            lastTouch = Time.time;
-        }
+        eventData.DoubleClick(OneTouch, TwoTouch);
+    }
+
+    static void Touch() {
+        Debug.Log("Touch");
+    }
+
+    static void Touch2()
+    {
+        Debug.Log("DoubleTouch");
     }
 }

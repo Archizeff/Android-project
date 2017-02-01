@@ -19,6 +19,7 @@ public class RoomHandler : MonoBehaviour, IPointerClickHandler
         if (touching && (Time.time - lastTouch > timeDoubleTouch))
         {
             touching = false;
+            Debug.Log("Touch");
         }
     }
 
