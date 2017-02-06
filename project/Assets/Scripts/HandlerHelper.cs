@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public static class HandlerHelper  {
@@ -8,10 +9,7 @@ public static class HandlerHelper  {
     public static float lastClick = 0f;
     public static bool clickPhase = false;
 
-    public delegate void OneClickFunc();
-    public delegate void DoubleClickFunc();
-
-    public static void DoubleClick(this PointerEventData _, OneClickFunc oneFunc, DoubleClickFunc twoFunc)
+    public static void DoubleClick(this PointerEventData _, Action oneFunc, Action twoFunc)
     {
         lastClick = Time.time;
         if (!clickPhase)

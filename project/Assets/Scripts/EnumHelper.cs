@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class EnumHelper : MonoBehaviour {
@@ -10,12 +11,12 @@ public class EnumHelper : MonoBehaviour {
         instance = this;
     }
 
-    public static void Processing(HandlerHelper.OneClickFunc oneFunc, HandlerHelper.DoubleClickFunc twoFunc)
+    public static void Processing(Action oneFunc, Action twoFunc)
     {
         instance.StartCoroutine(instance.Coroutine(oneFunc, twoFunc));
     }
 
-    IEnumerator Coroutine(HandlerHelper.OneClickFunc oneClickFunc, HandlerHelper.DoubleClickFunc doubleClickFunc)
+    IEnumerator Coroutine(Action oneClickFunc, Action doubleClickFunc)
     {
         HandlerHelper.ToggleClickPhase();
         yield return new WaitForSeconds(HandlerHelper.CATCH_TIME);

@@ -1,23 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BackgroundHandler : MonoBehaviour, IPointerClickHandler {
 
-    HandlerHelper.OneClickFunc OneTouch = new HandlerHelper.OneClickFunc(Touch);
-    HandlerHelper.DoubleClickFunc TwoTouch = new HandlerHelper.DoubleClickFunc(Touch2);
-
-
     public void OnPointerClick(PointerEventData eventData)
     {
-        eventData.DoubleClick(OneTouch, TwoTouch);
+        eventData.DoubleClick(() => OneTouch(), () => DoubleTouch());
     }
 
-    static void Touch() {
+    void OneTouch()
+    {
         Debug.Log("Touch");
     }
 
-    static void Touch2()
+    void DoubleTouch()
     {
         Debug.Log("DoubleTouch");
     }

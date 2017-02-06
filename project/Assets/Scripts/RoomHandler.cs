@@ -28,7 +28,7 @@ public class RoomHandler : MonoBehaviour, IPointerClickHandler
         if (touching)
         {
             touching = false;
-            sceneCamera.FocusRoom(transform);
+
         }
         else
         {
