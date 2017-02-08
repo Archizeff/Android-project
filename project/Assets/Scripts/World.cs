@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 public class World : MonoBehaviour {
 
-    public Transform[] rooms;
+    public GameObject[] rooms;
 
 	void Start () {
-        rooms = GetComponentsInChildren<Transform>();
+        rooms = GameObject.FindGameObjectsWithTag("Room");
     }
 
-    public void TurnOffWithout(Transform target)
+    public void TurnOffWithout(GameObject target)
     {
-        foreach (Transform room in rooms)
+        foreach (GameObject room in rooms)
         {
-            if (room != target && room != transform)
+            if (room != target)
             {
                 room.GetComponent<RoomHandler>().TurnActive(false);
             }
@@ -23,12 +23,22 @@ public class World : MonoBehaviour {
 
     public void TurnOnAll()
     {
-        foreach (Transform room in rooms)
+        foreach (GameObject room in rooms)
         {
-            if (room != transform)
+            room.GetComponent<RoomHandler>().TurnActive(true);
+        }
+    }
+
+    public Transform FindNearRoom(Vector3 currentPos)
+    {
+        Transform temp = rooms[0].transform; 
+        foreach (GameObject room in rooms)
+        {
+            if (Vector3.Distance(temp.position, currentPos) > Vector3.Distance(room.transform.position, currentPos))
             {
-                room.GetComponent<RoomHandler>().TurnActive(true);
+                temp = room.transform;
             }
         }
+        return temp;
     }
 }

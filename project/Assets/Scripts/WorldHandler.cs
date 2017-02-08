@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -50,7 +51,7 @@ public class WorldHandler : MonoBehaviour {
 
     void OnGUI()
     {
-        text.text = "X:" + Camera.main.transform.position.x + "\nY:" + Camera.main.transform.position.y + "\nZ:" + Camera.main.transform.position.z;
+        text.text = "Empty";
     }
 
     struct UserTouch
@@ -69,10 +70,7 @@ public class WorldHandler : MonoBehaviour {
 
         public Vector3 DeltaPosition
         {
-            get
-            {
-                return previousTouch == Vector2.zero ? Vector3.zero : GetCurrent() - GetPrevious();
-            }
+            get { return previousTouch == Vector2.zero ? Vector3.zero : GetCurrent() - GetPrevious(); }
         }
 
         public Vector3 GetCurrent()
@@ -82,7 +80,7 @@ public class WorldHandler : MonoBehaviour {
 
         public Vector3 GetPrevious()
         {
-            return previousTouch == Vector2.zero ? GetCurrent() : Camera.main.ScreenToWorldPoint(previousTouch);
+           return previousTouch == Vector2.zero ? GetCurrent() : Camera.main.ScreenToWorldPoint(previousTouch);
         }
     }
 }

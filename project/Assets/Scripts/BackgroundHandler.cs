@@ -5,6 +5,13 @@ using UnityEngine.EventSystems;
 
 public class BackgroundHandler : MonoBehaviour, IPointerClickHandler {
 
+    MainCamera cam;
+
+    void Awake()
+    {
+        cam = Camera.main.GetComponent<MainCamera>();
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         eventData.DoubleClick(() => OneTouch(), () => DoubleTouch());
@@ -12,11 +19,10 @@ public class BackgroundHandler : MonoBehaviour, IPointerClickHandler {
 
     void OneTouch()
     {
-        Debug.Log("Touch");
     }
 
     void DoubleTouch()
     {
-        Debug.Log("DoubleTouch");
+        cam.UpZoom();
     }
 }

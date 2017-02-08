@@ -3,38 +3,25 @@ using UnityEngine.EventSystems;
 
 public class RoomHandler : MonoBehaviour, IPointerClickHandler
 {
-    MainCamera sceneCamera;
-
-    bool touching = false;
-    float timeDoubleTouch = 0.3f;
-    float lastTouch;
+    MainCamera cam;
  
-    void Start()
+    void Awake()
     {
-        sceneCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MainCamera>();
-    }
-	
-	void Update ()
-    {
-        if (touching && (Time.time - lastTouch > timeDoubleTouch))
-        {
-            touching = false;
-            Debug.Log("Touch");
-        }
+        cam = Camera.main.GetComponent<MainCamera>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (touching)
-        {
-            touching = false;
+        eventData.DoubleClick(() => OneTouch(), () => DoubleTouch());
+    }
 
-        }
-        else
-        {
-            touching = true;
-            lastTouch = Time.time;
-        }
+    void OneTouch()
+    {
+    }
+
+    void DoubleTouch()
+    {
+        cam.ManageRoom(transform);
     }
 
     public void TurnActive(bool state)
