@@ -3,21 +3,18 @@ using System.Collections;
 
 public class MainCamera : MonoBehaviour {
 
-    public Vector3 defaultPosition;
     public Vector4 positionLim;
     public Vector2 zoomLim;
     public float defaultZoom;
+    public float middleZoom;
     public float focusZoom;
-    public float doubleZoom;
 
-    string state = "default";
-    string[] states = new string[] {"default", "focus", "doubleFocus"};
-
-    bool mooveBlock = false;
+    bool focus = false;
 
     Transform rotationParent;
     Transform targetRoom;
     World world;
+
     float targetZoom;
     Vector3 targetPosition;
     public Vector3 TargetPosition
@@ -27,6 +24,7 @@ public class MainCamera : MonoBehaviour {
             float x = Mathf.Clamp(value.x, positionLim[0], positionLim[1]);
             float y = Mathf.Clamp(value.y, positionLim[2], positionLim[3]);
             targetPosition = new Vector3(x, y, 0);
+            targetRoom = null;
         }
     }
 
@@ -35,7 +33,12 @@ public class MainCamera : MonoBehaviour {
         set
         {
             targetZoom = Mathf.Clamp(value, zoomLim[0], zoomLim[1]);
-            rotationParent.rotation = Quaternion.Euler(Mathf.Lerp(25, 45, Mathf.InverseLerp(doubleZoom, focusZoom, targetZoom)), 0, 0);
+
+            if (targetRoom == null) Align();
+            focus = targetZoom < focusZoom + 0.5f;
+            float temp = Mathf.InverseLerp(middleZoom, focusZoom, Camera.main.orthographicSize);
+            rotationParent.rotation = Quaternion.Euler(Mathf.Lerp(45, 25, temp), 0, 0);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetRoom.position, temp);
         }
     }
 
@@ -47,7 +50,7 @@ public class MainCamera : MonoBehaviour {
 
     public void MooveTo(Vector3 target)
     {
-        if (!mooveBlock)
+        if (!focus)
         {
             TargetPosition = transform.localPosition - target;
             transform.localPosition = targetPosition;
@@ -60,35 +63,47 @@ public class MainCamera : MonoBehaviour {
         Camera.main.orthographicSize = targetZoom;
     }
 
-    public void Align()
+    public void RoomClick(Transform room)
+    {
+        MoveToFocus(room);
+    }
+
+    public void BackClick()
+    {
+        if (Camera.main.orthographicSize < middleZoom)
+        {
+            Align();
+            MoveToMiddle(targetRoom);
+        }
+        else
+        {
+            MoveToDefault();
+        }
+    }
+
+    void Align()
     {
         targetRoom = world.FindNearRoom(transform.localPosition);
     }
 
-    void ToFocus(Transform target)
-    {
-        transform.localPosition = target.position;
-        Camera.main.orthographicSize = focusZoom;
-    }
-
-    void ToDoubleFocus(Transform target)
-    {
-        transform.localPosition = target.position;
-        Camera.main.orthographicSize = doubleZoom;
-    }
-
-    void ToDefault()
+    void MoveToDefault()
     {
         transform.localPosition = Vector3.zero;
+        rotationParent.rotation = Quaternion.Euler(45, 0, 0);
         Camera.main.orthographicSize = defaultZoom;
     }
 
-    public void ManageRoom(Transform room)
+    void MoveToMiddle(Transform target)
     {
-        Align();
+        transform.localPosition = target.position;
+        rotationParent.rotation = Quaternion.Euler(45, 0, 0);
+        Camera.main.orthographicSize = middleZoom + 0.5f * (defaultZoom - middleZoom);
     }
 
-    public void UpZoom()
+    void MoveToFocus(Transform target)
     {
+        transform.localPosition = target.position;
+        rotationParent.rotation = Quaternion.Euler(25, 0, 0);
+        Camera.main.orthographicSize = focusZoom;
     }
 }

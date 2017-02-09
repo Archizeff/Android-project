@@ -21,7 +21,7 @@ public class RoomHandler : MonoBehaviour, IPointerClickHandler
 
     void DoubleTouch()
     {
-        cam.ManageRoom(transform);
+        cam.RoomClick(transform);
     }
 
     public void TurnActive(bool state)

@@ -23,6 +23,6 @@ public class BackgroundHandler : MonoBehaviour, IPointerClickHandler {
 
     void DoubleTouch()
     {
-        cam.UpZoom();
+        cam.BackClick();
     }
 }
