@@ -20,7 +20,7 @@ public class EnumHelper : MonoBehaviour {
     {
         HandlerHelper.ToggleClickPhase();
         yield return new WaitForSeconds(HandlerHelper.CATCH_TIME);
-        if (Time.time - HandlerHelper.lastClick < HandlerHelper.CATCH_TIME)
+        if (Time.time - HandlerHelper.lastClick < HandlerHelper.CATCH_TIME && HandlerHelper.clickDistance < 60f)
         {
             doubleClickFunc();
         }

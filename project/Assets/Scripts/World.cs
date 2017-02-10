@@ -10,11 +10,11 @@ public class World : MonoBehaviour {
         rooms = GameObject.FindGameObjectsWithTag("Room");
     }
 
-    public void TurnOffWithout(GameObject target)
+    public void TurnOffWithout(Transform target)
     {
         foreach (GameObject room in rooms)
         {
-            if (room != target)
+            if (room.transform != target)
             {
                 room.GetComponent<RoomHandler>().TurnActive(false);
             }
